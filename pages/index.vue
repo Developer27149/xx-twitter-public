@@ -1,42 +1,28 @@
 <template>
-  <div
-    class="flex justify-center items-center flex-col py-32 min-h-screen gap-12"
-  >
-    <h1 class="text-3xl font-bold underline">Hello Juice!</h1>
-    <a href="https://github.com/Developer27149/create-juice-app">
-      <Icon name="uil:github" color="black" size="32" />
-    </a>
-    <button
-      class="px-2 items-center py-1 flex rounded-sm bg-blue-700 text-white min-w-[90px]"
-      @click="increment"
-    >
-      <Icon name="material-symbols:add" />
-      <span class="text-center flex-grow relative top-[1px]">
-        {{ count }}
-      </span>
-    </button>
-    <div
-      v-for="{ id, title, body } in data"
-      :key="id"
-      class="text-left max-w-[600px] w-full px-4 py-2 border border-gray-300 rounded-md shadow-md"
-    >
+  <div class="flex justify-center items-center flex-col py-32 min-h-screen gap-12 max-w-[1200px] p-12">
+    <h1 class="text-3xl font-bold underline">Hello {{ user?.user_metadata.name }}!</h1>
+    <section class="text-center px-12">
+      <p>黄推泛滥，是可忍孰不可忍！</p>
+      <br>
+      <p>让我们来共建信任链，在这里你可以选择订阅社区创建的黄推黑名单，配合浏览器插件自动 Block 这些可恶的黄推！</p>
+    </section>
+
+    <!-- <div v-for="{ id, title, body } in data" :key="id"
+      class="text-left max-w-[600px] w-full px-4 py-2 border border-gray-100 rounded-md shadow-md">
       <h2 class="text-xl font-bold">{{ title }}</h2>
       <p class="text-gray-500">{{ body }}</p>
-    </div>
+    </div> -->
+    {{
+      data }}
   </div>
 </template>
 
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
-import { globalStore, useGlobalStore } from '~/stores/global';
-import { commonApi } from '~/services/common';
-
-const { count } = useGlobalStore();
-const { increment } = globalStore();
 
 const { data, suspense } = useQuery({
   queryKey: ['demo'],
-  queryFn: () => commonApi.getDemoData(),
+  queryFn: () => useFetch('/api/block_group')
 });
 
 await suspense();

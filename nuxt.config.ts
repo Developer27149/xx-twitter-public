@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/css/tailwind.css'],
-  modules: ['nuxt-icon', '@pinia/nuxt'],
+  modules: ['nuxt-icon', '@pinia/nuxt', '@nuxtjs/supabase'],
   pinia: {
     autoImports: [
       // automatically imports `defineStore`

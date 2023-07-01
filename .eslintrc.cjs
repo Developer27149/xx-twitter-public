@@ -10,5 +10,7 @@ module.exports = {
   },
   extends: ['@nuxtjs/eslint-config-typescript', 'prettier'],
   plugins: [],
-  rules: {},
+  rules: {
+    'vue/first-attribute-linebreak': ['error', 'always'],
+  },
 };
