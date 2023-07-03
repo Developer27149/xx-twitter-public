@@ -17,6 +17,7 @@
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
     "@commitlint/config-conventional": "^17.6.3",
+    "@css-render/vue3-ssr": "^0.15.12",
     "@nuxt/test-utils": "^3.5.2",
     "@nuxtjs/eslint-config-typescript": "^12.0.0",
     "@nuxtjs/supabase": "^0.3.7",
@@ -28,6 +29,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "husky": "^8.0.3",
     "jsdom": "^22.1.0",
+    "naive-ui": "^2.34.4",
     "nuxt": "^3.5.1",
     "postcss": "^8.4.24",
     "prettier": "^2.8.8",
@@ -40,6 +42,7 @@
     "@supabase/supabase-js": "^2.26.0",
     "@tanstack/vue-query": "^4.29.11",
     "date-fns": "^2.30.0",
+    "jose": "^4.14.4",
     "lodash-es": "^4.17.21",
     "nuxt-icon": "^0.4.1",
     "pinia": "^2.1.3",

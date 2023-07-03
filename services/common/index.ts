@@ -1,7 +1,7 @@
-import { URL_GET_DEMO_DATA } from '../url.list';
-import { TDemoResponse } from './types';
-import { API } from '~/componsables/request';
+import { IBlockGroup } from './types';
+import { URL_BLOCK_GROUP } from '../url.list';
+import { getToken } from '../../componsables/clientUtils';
 
 export const commonApi = {
-  getDemoData: () => API.get<TDemoResponse>(URL_GET_DEMO_DATA),
+  getBlockGroup: () => useFetch<IBlockGroup[]>(URL_BLOCK_GROUP),
 };

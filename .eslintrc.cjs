@@ -13,4 +13,5 @@ module.exports = {
   rules: {
     'vue/first-attribute-linebreak': ['error', 'always'],
   },
+  excludes: ['node_modules', 'dist', '.nuxt', 'coverage', 'storybook-static'],
 };

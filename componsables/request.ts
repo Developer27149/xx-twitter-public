@@ -1,40 +1,20 @@
-import { getToken } from './clientUtils';
+import { UseFetchOptions } from 'nuxt/app';
 
-export const request = (url: string, options: RequestInit) => {
-  return fetch(url, options)
-    .then((response) => {
-      if (response.status === 401) {
-        throw new Error('Unauthorized');
-      }
-      return response.json();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-};
+export const useRequest = async <T>(url: string, options = {} as UseFetchOptions<T>) => {
+  // @ts-ignore
+  const { data, error, refresh } = useFetch<{ message: string; code: number; data: T }>(url, {
+    onResponse: response => {
+      // if(response._data)
+      console.log('use fetch interceptor response:', response);
+    },
+    onRequest: request => {
+      console.log('use fetch interceptor request:', request);
+    },
+    ...options,
+  });
+  // if (error.value) {
+  //   throw Error(error.value.message);
+  // }
 
-export const API = {
-  post: <T>(url: string, body = {}, options?: RequestInit) => {
-    return request(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${getToken()}`,
-      },
-      credentials: 'include',
-      ...options,
-      body: JSON.stringify(body),
-    }) as Promise<T>;
-  },
-  get: <T>(url: string, options?: RequestInit) => {
-    return request(url, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
-      },
-      credentials: 'include',
-      ...options,
-    }) as Promise<T>;
-  },
-  // ...
+  return { data, refresh, error };
 };
