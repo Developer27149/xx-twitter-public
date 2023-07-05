@@ -3,79 +3,59 @@
     class="bg-gray-800 whitespace-pre-wrap rounded-md p-4 object-cover bg-center bg-no-repeat bg-cover min-h-[300px] flex flex-col text-white relative"
     :style="{ 'backgroundImage': 'url(' + background + ')' }">
     <div class="flex justify-between items-center">
-      <h4 class="text-2xl">{{ title }}</h4>
-      <button v-if="mode !== 'preview' && user?.user_metadata" @click="onSubscribeAction"
+      <h4 class="text-2xl max-w-[80%] truncate">{{ title }}</h4>
+      <!-- <button v-if="mode !== 'preview' && user?.user_metadata" @click="onSubscribeAction"
         class="p-2 px-4 scale-[0.85] transition-all hover:scale-100 rounded-md text-[13px] bg-gray-400 bg-opacity-50 text-gray-50">
         {{
           isSubscribed ? '退订 🙃' : '订阅试试 ❤️' }}
-      </button>
+      </button> -->
     </div>
-    <section class="flex gap-4 items-center text-gray-200 mt-auto">
-      <img :src="author_avatar" class="w-10 h-10 rounded-full" />
-      <div>
-        <NuxtLink class="block text-gray-300" :to='`https://twitter.com/${user_name}`' target="_blank">
-          <span class="font-bold pr-1 text-white">{{ user_name }}</span>@<span>{{ name }}</span>
-        </NuxtLink>
-        <n-rate v-if="score !== 0" color="orangered" readonly allow-half :default-value="score" />
-      </div>
+    <p class="max-w-[80%] w-[400px] mt-auto">{{ intro }}</p>
 
-    </section>
-    <div class="flex justify-between items-end">
-      <p class="pt-12 max-w-[80%]">{{ intro }}</p>
-      <Icon @click="onReverseLikeStatus" v-if="isSubscribed"
-        class="cursor-pointer p-1 text-gray-800 bg-white bg-opacity-70 rounded-full text-[24px]"
-        :class="{ 'text-[orangered]': isLiked }" name="material-symbols:favorite-rounded" />
+
+    <div
+      class="absolute right-0 top-0 bottom-0 h-full bg-gray-900 bg-opacity-50 flex flex-col justify-center gap-4 p-2 text-2xl">
+      <NPopover trigger="hover" placement="left">
+        <span>{{ isSubscribed ? '退订 🙃' : '订阅试试 ❤️' }}</span>
+        <template #trigger>
+          <div class="cursor-pointer hover:text-primary" @click="onSubscribeAction">
+            <Icon name="ph:person-simple-run-thin" v-if="isSubscribed" />
+            <Icon name="clarity:group-line" v-else />
+          </div>
+        </template>
+      </NPopover>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { IBlockGroup } from '~/services/common/types';
-import { NRate } from 'naive-ui'
-import { URL_SUBSCRIBE_BLOCK_GROUP, URL_UPDATE_BLOCK_GROUP_LIKE } from '~/services/url.list';
+import { EBlockGroupAction, IBlockGroup } from '~/services/common/types';
+import { URL_SUBSCRIBE_BLOCK_GROUP } from '~/services/url.list';
+import { NPopover } from 'naive-ui';
+import { useRequest } from '~/componsables/request';
 
 const user = useSupabaseUser()
 const props = defineProps<IBlockGroup & {
-  mode?: 'preview' | 'default'
+  action?: EBlockGroupAction
 }>()
-const isLiked = ref(props.like_user?.includes(user.value?.user_metadata.user_name))
 
-// console.log('props', props)
-const subscribeList = computed(() => {
-  return props.subscribers?.split(',') ?? []
-})
-const isSubscribed = computed(() => {
-  return props.subscribers?.split(',').includes(user.value?.user_metadata.user_name)
-})
 
-const score = computed(() => {
-  if (props.like === 0 && props.dislike === 0) return 0
-  return +((props.like / (props.dislike + props.like)) * 5).toFixed(1)
-})
-
+const isSubscribed = ref(!!props.subscriber_list?.includes(user.value?.user_metadata.user_name))
 
 const onSubscribeAction = async () => {
-  const { data } = await useFetch(URL_SUBSCRIBE_BLOCK_GROUP, {
-    method: 'POST',
-    body: JSON.stringify({
-      user_name: user.value?.user_metadata.user_name,
+  const { error, data } = await useRequest(URL_SUBSCRIBE_BLOCK_GROUP, {
+    body: {
       id: props.id,
-      subscribes: isSubscribed.value ? subscribeList.value.filter(i => i !== user.value?.user_metadata.user_name) : `${props.subscribers},${user.value?.user_metadata.user_name}`
-    })
-  })
-  console.log('update response:', data)
-}
-
-const onReverseLikeStatus = async () => {
-  isLiked.value = !isLiked.value
-  const { data, error } = await useFetch(URL_UPDATE_BLOCK_GROUP_LIKE, {
-    body: JSON.stringify({
-      id: props.id,
-      isLike: isLiked.value,
-      user_name: user.value?.user_metadata.user_name
-    }),
+      subscriber: isSubscribed.value
+    },
     method: 'POST'
   })
-  console.log(data.value, error.value)
+
+  console.log('subscribe', data, error)
+
+  if (!error.value) {
+    isSubscribed.value = !isSubscribed.value
+  }
 }
+
 </script>

@@ -2,17 +2,12 @@ export interface IBlockItem {}
 export interface IBlockGroup {
   id: number;
   created_at: string;
-  user_name: string;
   title: string;
   intro: string;
-  like: number;
-  dislike: number;
-  background?: any;
-  subscribers: string | null;
+  background?: string;
   ban: boolean;
-  name: string;
-  author_avatar: string;
-  like_user: string | null;
+  subscriber_list: string[] | null;
+  author_list: string[];
 }
 
 export interface IApp_metadata {
@@ -54,5 +49,25 @@ export interface IUserMetadata {
 }
 
 export enum ECustomHTTPErrorCode {
+  'success' = 0,
+  'unauthorized' = 401,
+  'server-error' = 500,
   'no-allow-create' = 1001,
+}
+
+export interface ICustomResponse<T> {
+  code: ECustomHTTPErrorCode;
+  message: string;
+  data: T;
+}
+
+export enum EBlockGroupAction {
+  'preview' = 'preview',
+  'share' = 'share',
+  'delete' = 'delete',
+}
+
+export enum ESupabaseRPC {
+  'add_sub_to_block_group' = 'add_sub_to_block_group',
+  'remove_sub_from_block_group' = 'remove_sub_from_block_group',
 }

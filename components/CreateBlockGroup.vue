@@ -1,5 +1,5 @@
 <template>
-  <n-message-provider>
+  <div>
     <NButton color="black" @click="showModal = true">
       <template #icon>
         <Icon name="material-symbols:add-box-outline" />
@@ -34,22 +34,21 @@
         <BlockGroup v-if="showPreview" :="uploadData" mode="preview" />
       </div>
     </NModal>
-  </n-message-provider>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { FormInst, FormRules, NButton, NForm, NFormItem, NInput, NModal, useMessage } from 'naive-ui'
+import { FormInst, FormRules, NButton, NForm, NFormItem, NInput, NModal } from 'naive-ui'
 import { IBlockGroup } from '~/services/common/types';
 import BlockGroup from './BlockGroup.vue';
 import { URL_BLOCK_GROUP } from '~/services/url.list';
 import { useRequest } from '~/componsables/request';
 
-const props = defineProps<{ refresh: (params?: any) => Promise<unknown> }>()
+const props = defineProps<{ refresh?: (params?: any) => Promise<unknown> }>()
 
 const user = useSupabaseUser()
 const showModal = ref(false)
 const showPreview = ref(false)
-const message = useMessage()
 const form = reactive({
   title: '',
   intro: '',
@@ -82,11 +81,9 @@ const onSubmit = () => {
         body: JSON.stringify(uploadData.value),
       })
       if (error.value) {
-        console.log('error:', error.value)
-        console.log('data:', data.value)
-        message.error(error.value.message)
+        console.log('xx error xx:', error)
       } else {
-        await props.refresh()
+        await props.refresh?.()
         showModal.value = false
       }
     }

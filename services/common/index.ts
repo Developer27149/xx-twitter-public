@@ -1,7 +1,9 @@
 import { IBlockGroup } from './types';
 import { URL_BLOCK_GROUP } from '../url.list';
-import { getToken } from '../../componsables/clientUtils';
+import { useRequest } from '~/componsables/request';
 
 export const commonApi = {
-  getBlockGroup: () => useFetch<IBlockGroup[]>(URL_BLOCK_GROUP),
+  getBlockGroup: () => useRequest<IBlockGroup[]>(URL_BLOCK_GROUP),
+  getMyBlockGroup: (user_name: string) => useRequest<IBlockGroup[]>(URL_BLOCK_GROUP + `/${user_name}`),
+  getMySubscriberBlockGroup: (user_name: string) => useRequest<IBlockGroup[]>(URL_BLOCK_GROUP + `/${user_name}/subscriber`),
 };
