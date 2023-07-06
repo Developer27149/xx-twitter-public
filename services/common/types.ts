@@ -7,7 +7,7 @@ export interface IBlockGroup {
   background?: string;
   ban: boolean;
   subscriber_list: string[] | null;
-  author_list: string[];
+  trust_list: string[];
   default_author: string;
 }
 

@@ -37,7 +37,6 @@ export default defineEventHandler(async event => {
     const insertData = {
       ...body,
       default_author: userInfo.user_name,
-      author_list: [userInfo.user_name],
       subscriber_list: [userInfo.user_name],
     };
     const { data, error } = await supabase.from('block_group').insert(insertData).select().single();

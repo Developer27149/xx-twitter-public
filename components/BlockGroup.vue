@@ -13,7 +13,7 @@
     <p class="max-w-[80%] w-[400px] mt-auto">{{ intro }}</p>
     <p class="text-[12px] opacity-50 pt-1 hover:opacity-100 transition-all" v-if="subscriber_list?.length">{{
       subscriber_list?.length
-    }}人正在订阅</p>
+    }}人订阅</p>
 
     <div v-if="action?.length"
       class="absolute right-0 top-0 bottom-0 h-full bg-gray-900 bg-opacity-50 flex flex-col justify-end items-center gap-2 p-2 text-2xl">
