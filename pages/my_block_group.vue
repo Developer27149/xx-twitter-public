@@ -8,7 +8,8 @@
         <CreateBlockGroup :refresh="refresh" />
       </div>
       <div class="mt-4 grid grid-cols-2 gap-2">
-        <BlockGroup v-for="(item, index) in (data as IBlockGroup[])" :key="index" :="item" />
+        <BlockGroup v-for="(item, index) in (myBlockGroup.data.value as IBlockGroup[])" :key="index" :="item"
+          :action="['ban', 'delete', 'share']" />
       </div>
     </div>
 
@@ -20,7 +21,8 @@
 
       </div>
       <div class="mt-4 grid grid-cols-2 gap-2">
-        <BlockGroup v-for="(item, index) in (data as IBlockGroup[])" :key="index" :="item" />
+        <BlockGroup v-for="(item, index) in (mySubscriberGroup.data.value as IBlockGroup[])" :key="index" :="item"
+          :action="['subscribe']" />
       </div>
     </div>
 
@@ -40,8 +42,13 @@ definePageMeta({
 })
 
 const user = useSupabaseUser()
+const user_name = user.value?.user_metadata.user_name
 
-const { data, refresh } = await commonApi.getMyBlockGroup(user.value?.user_metadata.user_name)
+const [myBlockGroup, mySubscriberGroup] = await Promise.all([
+  commonApi.getMyBlockGroup(user_name),
+  commonApi.getMySubscriberBlockGroup(user_name)
+])
 
+console.log(mySubscriberGroup.data.value)
 </script>
 

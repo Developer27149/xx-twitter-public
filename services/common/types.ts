@@ -8,6 +8,7 @@ export interface IBlockGroup {
   ban: boolean;
   subscriber_list: string[] | null;
   author_list: string[];
+  default_author: string;
 }
 
 export interface IApp_metadata {
@@ -65,7 +66,11 @@ export enum EBlockGroupAction {
   'preview' = 'preview',
   'share' = 'share',
   'delete' = 'delete',
+  'ban' = 'ban',
+  'subscribe' = 'subscribe',
 }
+
+export type TBlockGroupAction = keyof typeof EBlockGroupAction;
 
 export enum ESupabaseRPC {
   'add_sub_to_block_group' = 'add_sub_to_block_group',

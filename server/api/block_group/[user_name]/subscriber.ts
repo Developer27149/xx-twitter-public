@@ -5,16 +5,17 @@ import { useSupabase } from '~/componsables/useSupabase';
 
 export default defineEventHandler(async event => {
   const supabase = useSupabase();
-  const method = event.node.req.method;
   const { user_name } = event.context.params ?? {};
-  if (method === 'GET' || !user_name) {
-    const { data, error } = await supabase.from('block_group').select('*').eq('default_author', user_name).order('created_at', { ascending: false });
+  if (!user_name) return generate501Response();
+  if (event.node.req.method === 'GET') {
+    const { data, error } = await supabase.from('block_group').select('*').contains('subscriber_list', [user_name]).eq('ban', false).order('created_at', { ascending: false });
     if (error) {
       console.log('get my block group failed:', error);
       return generate501Response();
     }
     return generateApiSuccessResponse(data);
   } else {
-    return generateApiServerErrorResponse({ code: ECustomHTTPErrorCode['server-error'], message: 'not support method' });
+    // now allow method
+    return generateApiServerErrorResponse({ code: ECustomHTTPErrorCode['no-allow-create'], message: 'not support method' });
   }
 });

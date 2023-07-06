@@ -10,21 +10,24 @@
       <p>让我们来共建信任社区，在这里你可以选择订阅社区创建的黄推黑名单，配合浏览器插件自动 Block 这些可恶的黄推！</p>
       <h5 class="py-4 text-xl">订阅说明：</h5>
       <ul class="list-disc pl-8">
-        <li>订阅后配合插件系统将会自动批量 Block 订阅的组每周更新的黄推名单</li>
+        <li>订阅后配合插件系统将会自动批量 Block 订阅的组<span class="text-primary px-1">每周</span>更新的黄推名单</li>
         <li>每个用户目前最多创建两个订阅组</li>
       </ul>
     </section>
-    <BlockGroup v-if="data" :="data?.[0]" />
-    <div class="grid grid-cols-2 gap-6 my-6" v-if="data && data.length > 1">
-      <BlockGroup v-for="attrs, idx in data.slice(1)" :key="idx" :="attrs" />
+    <BlockGroup v-if="blockGroupList" :="blockGroupList?.[0]" :action="['share', 'subscribe']" />
+    <div class="grid grid-cols-2 gap-6 my-6" v-if="blockGroupList && blockGroupList.length > 1">
+      <BlockGroup v-for="attrs, idx in blockGroupList.slice(1)" :key="idx" :="attrs" :action="['share', 'subscribe']" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { commonApi } from '~/services/common/index'
+import { useGlobalStore } from '~/stores/global';
 
+const { blockGroupList } = useGlobalStore()
 const user = useSupabaseUser()
 const { data, refresh } = await commonApi.getBlockGroup()
-console.log('data:::', data.value)
+blockGroupList.value = data.value ?? []
+
 </script>

@@ -44,12 +44,12 @@ import BlockGroup from './BlockGroup.vue';
 import { URL_BLOCK_GROUP } from '~/services/url.list';
 import { useRequest } from '~/componsables/request';
 
-const props = defineProps<{ refresh?: (params?: any) => Promise<unknown> }>()
+const props = defineProps<{ refresh?: (params?: any) => Promise<unknown>, initData?: IBlockGroup }>()
 
 const user = useSupabaseUser()
 const showModal = ref(false)
 const showPreview = ref(false)
-const form = reactive({
+const form = reactive(props.initData ?? {
   title: '',
   intro: '',
   background: '',
@@ -62,15 +62,8 @@ const rules = {
 
 const formRef = ref<FormInst>()
 const uploadData = computed(() => ({
-  like: 0,
-  dislike: 0,
-  subscribers: user.value?.user_metadata.user_name ?? '',
-  user_name: user.value?.user_metadata.user_name,
-  name: user.value?.user_metadata.name,
-  author_avatar: user.value?.user_metadata.avatar_url,
-  title: form.title,
-  intro: form.intro,
-  background: form.background,
+  ...form,
+  ban: false,
 } as IBlockGroup))
 
 const onSubmit = () => {

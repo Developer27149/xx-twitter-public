@@ -14,19 +14,26 @@
 
       <NPopover trigger="hover" placement="right">
         <template #trigger>
-          <NuxtLink to="/block_group" class="p-1 bg-gray-50 rounded-md bg-opacity-10 ">
+          <NuxtLink to="/my_block_group" class="p-1 bg-gray-50 rounded-md bg-opacity-10 ">
             <Icon name="clarity:group-line"
-              :class="{ 'text-primary': $route.path === '/block_group', 'text-gray-100': $route.path !== '/search' }"
+              :class="{ 'text-primary': $route.path === '/my_block_group', 'text-gray-100': $route.path !== '/search' }"
               class="cursor-pointer w-8 h-8 text-gray-100  transition-all hover:text-primary" />
           </NuxtLink>
         </template>
         <span>我的订阅</span>
       </NPopover>
 
-      <NuxtLink to="search" class="p-1 bg-gray-50 rounded-md bg-opacity-10">
-        <Icon :class="{ 'text-primary': $route.path === '/search', 'text-gray-100': $route.path !== '/search' }"
-          name="ic:outline-search" class="cursor-pointer w-8 h-8 text-gray-100  transition-all hover:text-primary" />
-      </NuxtLink>
+      <NPopover trigger="hover" placement="right">
+        <template #trigger>
+          <NuxtLink to="/block_check" class="p-1 bg-gray-50 rounded-md bg-opacity-10">
+            <Icon :class="{ 'text-primary': $route.path === '/search', 'text-gray-100': $route.path !== '/search' }"
+              name="ic:outline-search" class="cursor-pointer w-8 h-8 text-gray-100  transition-all hover:text-primary" />
+          </NuxtLink>
+        </template>
+        <span>拉黑检索</span>
+      </NPopover>
+
+
     </div>
     <div class="mt-auto mb-8 mx-auto flex flex-col items-center gap-8">
       <img v-if="user?.user_metadata" :src="user.user_metadata.avatar_url" @error="onError"

@@ -10,16 +10,15 @@ export const useRequest = async <T>(url: string, options = {} as UseFetchOptions
         throw Error(response.statusText);
       }
       const rawData = response._data;
-      console.log('raw data:', rawData);
       const { data } = rawData;
       if (rawData.code === 0) {
         response._data = data as T;
       } else {
         const { notification } = createDiscreteApi(['notification']);
-        console.log('request interceptor:', notification);
         notification.info({
           content: rawData.message,
           title: '很抱歉',
+          duration: 3 * 1000,
         });
         throw Error(data.message);
       }
